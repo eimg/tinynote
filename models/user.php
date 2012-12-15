@@ -30,7 +30,12 @@ function insert_user($name, $email, $password) {
 	$result = $db->set_query("INSERT INTO users (name, email, password) VALUES ('$name','$email','$password')");
 
 	if($result) {
-		set_auth();
+
+		$title = "Hello, World!";
+		$body = "This is your first note. Please edit as you wish and hit the Save Note button to save your changes. To add new note, use the Add New Note button above note list. You can send your note to any email address via Send To button.<br><br>This app is created with TinyMVC PHP micro framework and for example purpose only. Thanks for using...";
+		$db->set_query("INSERT INTO notes (user_id, title, body, super_note) VALUES ($result,'$title','$body',1)");
+
+		set_auth($result);
 		return $result;
 	}
 

@@ -50,8 +50,10 @@ $(function() {
 					$("#del-note").show();
 				}
 
-				$("#note-sidebar").hide();
-				$("#note-reader").show();
+				if(smallScreen) {
+					$("#note-sidebar").hide();
+					$("#note-reader").show();
+				}
 
 			})
 			.appendTo("#note-list")
@@ -89,8 +91,10 @@ $(function() {
 				$("#note-body").val( noteBody );
 				$(".wysihtml5-sandbox").contents().find(".note").html( noteBody );
 
-				$("#note-sidebar").hide();
-				$("#note-reader").show();
+				if(smallScreen) {
+					$("#note-sidebar").hide();
+					$("#note-reader").show();
+				}
 
 			})
 			.appendTo("#note-list")
