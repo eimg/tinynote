@@ -1,3 +1,10 @@
+<? if($action == "create-failed"): ?>
+<div class="alert">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<strong>Can't create account!</strong> Please try again with another email.
+</div>
+<? endif; ?>
+
 <div class="tabbable">
 	
 	<ul class="nav nav-tabs">

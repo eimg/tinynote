@@ -26,6 +26,11 @@ function clear_auth() {
 function insert_user($name, $email, $password) {
 	$db = new Database();
 
+	$check = $db->get_query("SELECT * FROM users WHERE email='$email'");
+	if($check) {
+		return false;
+	}
+
 	$password = md5($password);
 	$result = $db->set_query("INSERT INTO users (name, email, password) VALUES ('$name','$email','$password')");
 
