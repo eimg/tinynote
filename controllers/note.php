@@ -1,4 +1,6 @@
 <?php
+if(!is_auth()) redirect("user/signin");
+
 switch($action) {
 	case "all":
 		get_all();
