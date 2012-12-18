@@ -281,7 +281,7 @@ $(function() {
 		emailValidator.resetForm();
 	});
 
-	$("#email-modal [data-dismiss=modal]").click(function() {
-		$("#email-modal").modal("hide");
+	$("[data-dismiss=modal]").click(function() {
+		$(".modal").modal("hide");
 	});
 });
