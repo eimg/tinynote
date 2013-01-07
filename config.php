@@ -9,7 +9,8 @@ $config = array(
 	# "dbhost" => "127.0.0.1",
 	# "dbuser" => "root",
 	# "dbpass" => "",
-	# "dbname" => "tinymvc",
+	# "dbname" => "tinynote",
 
 	"default-controller" => "home"
 );
+

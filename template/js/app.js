@@ -26,7 +26,8 @@ $(function() {
 		$.each(data, function(i, note) {
 			var noteSelector = $("<a>", {
 				"href": "#"
-			}).text(note.title)
+			})
+			.text(note.title)
 			.attr("data-title", note.title)
 			.attr("data-id", note.id)
 			.attr("data-body", note.body)
