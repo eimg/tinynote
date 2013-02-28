@@ -3,8 +3,10 @@ function get_notes() {
 	$user = get_user_data();
 	$user_id = $user['id'];
 
-	$db = new Database();
-	$result = $db->get_query("SELECT * FROM notes WHERE user_id = $user_id ORDER BY created_date");
+	$db = new db();
+	$result = $db->read("notes", "user_id=:id ORDER BY created_date", array(
+		":id" => $user_id
+	));
 
 	return $result;
 }
@@ -13,8 +15,11 @@ function add_note() {
 	$user = get_user_data();
 	$user_id = $user['id'];
 
-	$db = new Database();
-	$result = $db->set_query("INSERT INTO notes (user_id, title) VALUES ($user_id, 'Empty note')");
+	$db = new db();
+	$result = $db->create("notes", array(
+		"user_id" => $user_id,
+		"title" => "Empty note"
+	));
 
 	return $result;
 }
@@ -28,8 +33,13 @@ function save_note($id, $title, $body) {
 		$title = truncate(strip_tags($body), 30);
 	}
 
-	$db = new Database();
-	$result = $db->set_query("UPDATE notes SET title='$title', body='$body' WHERE id=$id");
+	$db = new db();
+	$result = $db->update("notes", array(
+		"title" => $title,
+		"body" => $body
+	), "id = :id", array(
+		":id" => $id
+	));
 
 	$result = array(
 		"id" => $id,
@@ -41,21 +51,27 @@ function save_note($id, $title, $body) {
 }
 
 function remove_note($id) {
-	$db = new Database();
-	$result = $db->get_query("SELECT super_note FROM notes WHERE id=$id");
+	$db = new db();
+	$result = $db->read("notes", "id = :id", array(
+		":id" => $id
+	), "super_note");
 
 	if(!$result || $result[0]['super_note']) {
 		return false;
 	}
 
-	$result = $db->set_query("DELETE FROM notes WHERE id=$id");
+	$result = $db->delete("notes", "id = :id", array(
+		":id" => $id
+	));
 
 	return $result;
 }
 
 function send_note_to_email($email, $id) {
-	$db = new Database();
-	$result = $db->get_query("SELECT * FROM notes WHERE id=$id");
+	$db = new db();
+	$result = $db->read("notes", "id = :id", array(
+		":id" => $id
+	));
 
 	$subject = "[TinyNote] " . $result[0]['title'];
 	$body = "<html><body>";

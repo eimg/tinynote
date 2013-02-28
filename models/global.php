@@ -7,9 +7,11 @@ function get_user_data() {
 	if(!is_auth) return false;
 
 	$id = $_SESSION['id'];
-	$db = new Database();
+	$db = new db();
 
-	$result = $db->get_query("SELECT * FROM users WHERE id=$id");
+	$result = $db->read("users", "id = :id", array(
+		":id" => $id
+	));
 
 	return $result[0];
 }

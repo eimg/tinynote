@@ -1,9 +1,12 @@
 <?php
 function check_auth($email, $password) {
-	$db = new Database();
+	$db = new db();
 
 	$password = md5($password);
-	$result = $db->get_query("SELECT * FROM users WHERE email='$email' AND password='$password'");
+	$result = $db->read("users", "email = :email AND password = :password", array(
+		":email" => $email,
+		":password" => $password
+	));
 
 	if($result) {
 		set_auth($result[0]['id']);
@@ -24,21 +27,33 @@ function clear_auth() {
 }
 
 function insert_user($name, $email, $password) {
-	$db = new Database();
+	$db = new db();
 
-	$check = $db->get_query("SELECT * FROM users WHERE email='$email'");
+	$check = $db->read("users", "email = :email", array(
+		":email" => $email
+	));
 	if($check) {
 		return false;
 	}
 
 	$password = md5($password);
-	$result = $db->set_query("INSERT INTO users (name, email, password) VALUES ('$name','$email','$password')");
+	$result = $db->create("users", array(
+		"name" => $name,
+		"email" => $email,
+		"password" => $password,
+	));
 
 	if($result) {
 
 		$title = "Hello, World!";
 		$body = "This is your first note. Please edit as you wish and hit the Save Note button to save your changes. To add new note, use the Add New Note button above note list. You can send your note to any email address via Send To button.<br><br>This app is created with TinyMVC PHP micro framework and for example purpose only. Thanks for using...";
-		$db->set_query("INSERT INTO notes (user_id, title, body, super_note) VALUES ($result,'$title','$body',1)");
+
+		$db->create("notes", array(
+			"user_id" => $result,
+			"title" => $title,
+			"body" => $body,
+			"super_note" => 1
+		));
 
 		set_auth($result);
 		return $result;
@@ -48,22 +63,32 @@ function insert_user($name, $email, $password) {
 }
 
 function update_name($name) {
-	$db = new Database();
+	$db = new db();
 
 	$user = get_user_data();
 	$id = $user['id'];
-	$result = $db->set_query("UPDATE users SET name='$name' WHERE id=$id");
+
+	$result = $db->update("users", array(
+		"name" => $name
+	), "id = :id", array(
+		":id" => $id
+	));
 
 	return $result;
 }
 
 function update_password($password) {
-	$db = new Database();
+	$db = new db();
 
 	$user = get_user_data();
 	$id = $user['id'];
 	$password = md5($password);
-	$result = $db->set_query("UPDATE users SET password='$password' WHERE id=$id");
+
+	$result = $db->update("users", array(
+		"password" => $password
+	), "id = :id", array(
+		":id" => $id
+	));
 
 	return $result;
 }
